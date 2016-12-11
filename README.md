@@ -7,11 +7,14 @@
 
 ### syntax
 
+-  SourceFile         = PackageClause ";" { ImportDecl ";"} { TopLevelDecl ";" } .
+         TopLevelDecl = Declaration | FunctionDecl | MethodDecl .
+         Declaration = Constecl | TypeDecl | VarDecl .
+
 -  go programes are constructed by linking together packages.
 -  a package in turn is constructed from one or more source files that together declare constants,types,variables and 
     functions belonging to  the packages and which are accessible in all files of the same package.Those elemants may be
     exported and used in another package.
--  SourceFile         = PackageClause ";" { ImportDecl ";"} { TopLevelDecl ";" } .
 -  a package clause begins each source file and defines the package to which the file belongs.
 -  PackageClause      = "package" PackageName. 
    PackageName         = identifier.
@@ -43,8 +46,6 @@
 -  The blank identifier may be used like any other identifier in a declaration,but it does not  introduce a binding and thus is not declared.
     In the package block,the identifier init   may only be used for init function declarations, and  like the blank identifier it does not introuce
      a new binding.
--  Declaration = ConstDecl | TypeDecl | VarDecl .
-    TopLevelDecl = Declaration | FunctionDecl | MethodDecl .
 -  the scope of a declared identifier is the extent of source text in which the identifier denotes the specified constant,type,variable,function
     label,or package.
      *   the predeclared identifier is the universe block.
