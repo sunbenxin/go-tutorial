@@ -73,3 +73,11 @@
        in contrast to other identifiers, labels are not block scoped  and do not conflict with identifiers that are not labels. The scope of a label
        is the function in which it is declared and exclude the body of any nested function.
 -  the blank identifier is represented by the underscore character _.
+
+### Program initialization and execution
+
+- When storage is allocated for a variable,either through a declaration or a call of new,or when a new value is created,either through a composite literal or a call of make,
+  and no explicit  initialization is provided, the variable of value is given a defalult value. Each element of such a variable is set to zero value of that type: false for booleans, 0 for integers,0.0 for floats,"" for strings,and nil for pointers,functions,interface,slices,channels and maps.
+
+- within a package, package-level variable are initialized in declation order but after any of variables the  variables depend on.
+
