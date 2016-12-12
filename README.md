@@ -7,6 +7,12 @@
 
 ### syntax
 
+- ebnf 
+            |   alternation
+            ()  grouping
+            []  option (0 or 1 times)
+            {}  repetition (0 to n times)
+
 -  go programes are constructed by linking together packages.
 
          SourceFile   = PackageClause ";" { ImportDecl ";"} { TopLevelDecl ";" } .
