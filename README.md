@@ -7,13 +7,14 @@
 
 ### syntax
 
--  SourceFile         = PackageClause ";" { ImportDecl ";"} { TopLevelDecl ";" } .
+-  go programes are constructed by linking together packages.
+
+         SourceFile   = PackageClause ";" { ImportDecl ";"} { TopLevelDecl ";" } .
 
          TopLevelDecl = Declaration | FunctionDecl | MethodDecl .
 
-         Declaration = Constecl | TypeDecl | VarDecl .
+         Declaration  = Constecl | TypeDecl | VarDecl .
 
--  go programes are constructed by linking together packages.
 -  a package in turn is constructed from one or more source files that together declare constants,types,variables and 
     functions belonging to  the packages and which are accessible in all files of the same package.Those elemants may be
     exported and used in another package.
