@@ -8,7 +8,9 @@
 ### syntax
 
 -  SourceFile         = PackageClause ";" { ImportDecl ";"} { TopLevelDecl ";" } .
+
          TopLevelDecl = Declaration | FunctionDecl | MethodDecl .
+
          Declaration = Constecl | TypeDecl | VarDecl .
 
 -  go programes are constructed by linking together packages.
