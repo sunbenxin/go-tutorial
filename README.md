@@ -7,7 +7,8 @@
 
 ### syntax
 
-- ebnf 
+- ebnf
+
             |   alternation
             ()  grouping
             []  option (0 or 1 times)
