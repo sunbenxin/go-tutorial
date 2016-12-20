@@ -75,9 +75,78 @@
 -  the blank identifier is represented by the underscore character _.
 
 ### Program initialization and execution
+- Within a package, package-level variables are initialized in declaration order but after any variables they depend on.
+  a package-level variable is considered ready for initialized  if it is not yet initialized and either has no initialization expression or its initialization expression
+  has no dependencies on uninitialized variables.Initializaiton proceeds by repeatedly  initializing the next package-level variable that is earliest in declaration order and ready for
+  initialization,until there are no variables ready for initialization.
 
-- When storage is allocated for a variable,either through a declaration or a call of new,or when a new value is created,either through a composite literal or a call of make,
-  and no explicit  initialization is provided, the variable of value is given a defalult value. Each element of such a variable is set to zero value of that type: false for booleans, 0 for integers,0.0 for floats,"" for strings,and nil for pointers,functions,interface,slices,channels and maps.
+- If any variables are still uninitialized when this process ends,those variables are part of one or more initialization cycles,and the program is not valid.
+- The declaration order of variables declared in multiple files is determined by the order in which the files are presented to the compiler.
+- variables may also be initialized using functions named init declared in the package block.Mutiple such function may be defined.
+- If multiple packages import a package, the imported package  will be initialized only once.
+- Package initialization - variable initialization and the invocation of init functions - happends in a single goroutine, sequentially,one package at a time.
+- An init function may launch other goroutines, which can run coucurrently with the initializaiton code.However,the 
+    initializaiton always sequences the init functions:it will not invoke the next one until the previous has finished.
+- to eusure reproducible initialization behavior,build systems are encoraged to present mutiple files belonging to the same package in lexical file name order to 
+  to a compiler.
 
-- within a package, package-level variable are initialized in declation order but after any of variables the  variables depend on.
+- a complete program is created by linking a single,unimported package called the main package with all the packages it imports,transitively. The main package must have package name
+  main and declare a function main that takes no auguments and returns no value.
+
+- Program execution begins by initializing the main package and then invoking the function main. When that function invocation returns,the program exits.It does not wait for other(non-main) 
+  goroutines to complete.
+
+
+- The predeclared type error is the conventional interface for representing an error condition,with the nil value representing no error.
+
+- Execution errors such as attempting to index an array out of bounds trigger a run-time panic,equivalent to call of the built-in function panic with a value of th e
+  implementation-definedinterface type runtime.Error.
+
+
+### declarations
+## constant decalrations
+-  a constant declaration binds a list of identifiers to the values of a list of constant expressiongs.
+    ConstDecl   =   "const" ( ConstSpec ) | "(" {  ConstSpec ";" } ")" ).
+    ConstSpec   =   IdentifierList  [ [ Type ] "=" ExpressionList ].
+    IdentifierList  =   identifier { "," identifier }.
+    ExpressionList  = Expression { "," Expression }.
+
+- If the type is present, all constants take the type specified.if the type if omitted,the constants
+  take the individual types of the corresponding expressions.
+  If the expression values are untyped constants,the declared constants remain untyped and the constant
+  identifiers denote the constant values.
+
+- within a parenthesized const declaration list the expression list may be omitted from any but the 
+  first declaration. Such an empty list is equivalent to the textual substitution of the first preceding
+  non-empty expression list and its type if any.Omitting the list of expressions is therefore equivalent to repeating
+  the previous list.
+
+- the predeclared identifier iota represents successive untyped integer constants.It is reset to 0 whenever the 
+  reserved word const appears in the source and increments after each ConstSpec.
+
+- within a ExpressionList, the value of each iota is the same because it is only incremented after each ConstSpec.
+
+-
+# Type declarations
+
+- A type declaration binds an identifier, the type name, to a new type that has the same underlying type as an existing type.
+  the operations defined for the existing tpe are also defined for the new type.
+  The new type is different from the existing type.
+
+    TypeDecl    =   "type" ( TypeSpec | "(" { TypeSpec ";" } ")" ).
+    TypeSpec    =   identifier  Type .
+
+- The declared type does not inherit any methods bound to the existing type, the the method set of an interface type
+   or of emements of a composite type remains unchanged.
+
+-# Variable declarations
+
+- A variable declaration creates one or more variables, binds corresponding identifiers to them,and gives each a type and an initial value.
+
+    VarDecl     =   "var" ( VarSpec | "(" { VarSpec ";" } ")" ).
+    VarSpec     =   IdentifierList ( Type [ "=" ExpressionList ] | "=" ExpressionList )
+
+-  If a type is not present,each variable is given the type of the corresponding initialization value in the assignment.
+  if that value is an untyped constant,it is first converted to its default type. it it is an untyped boolean value, it is first converted to type bool.
+    the predeclared value nil cannot be used to initialize a variable with no explicit type.
 
