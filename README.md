@@ -315,3 +315,13 @@
 
 - A single channel may be used in send statements,receive operations, and calls to the built-in functions cap and len by any number of goroutines without further synchronization.
 - channels acs as first-in-first-out queues.
+# unsafe
+-  The built-in package unsafe,known to the compiler,provides facilities for low-level programming
+	including operations that violate the type system. A pacakge using unsafe must be vetted 
+	manually for type safety and may not be portable.
+
+- built-in functions are predeclared.the built-in functions do not have standard Go types, so they 
+	can only appear in call expressios;they cannot be used as function values.
+-  for a channel c, the built-in function close(c) records that no more values will be sent on the
+	channel.Tt is an error if c is a receive-only channel.Sending to or closing a closed channel	
+
