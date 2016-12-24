@@ -150,6 +150,171 @@
   if that value is an untyped constant,it is first converted to its default type. it it is an untyped boolean value, it is first converted to type bool.
     the predeclared value nil cannot be used to initialize a variable with no explicit type.
 
+# Function declarations
+
+- A function declaration binds an identifier, the function name, to a function.
+
+    FunctionDecl    =   "func" FunctionName ( Function | Signature ).
+    FunctionName    = identifier .
+    Function    = Signature FunctionBody.
+    FunctionBody    = Block
+
+- If the function's signature declares result parameters, the function body's statement list
+    must end in a terminating statement.
+
+- A function declaration may omit the body. function implemented outside Go, such as an assembly routine.
+
+# Method declarations
+
+- A method is a function with a receiver. A method declaration binds an identifier, the
+    method name, to a method, and associates the method with the reciever's base type.
+
+    MethodDecl  =   "func" Receiver MethodName ( Function | Signature ).
+    Receiver    =   Parameters .
+
+- The parameter section must declare a single non-variadic parameter,the receiver.
+- Its type must be of the form T or (xing T) .The T is called the receiver base type;
+    it must not be a pointer or interface type and it must be declared in the 
+    same package as the method.
+
+- A non-blank receiver identifier must be unique in the method signature. If the receiver's
+    value is not referenced inside the body of the method, its identifier may be omitted in the 
+    declaration. The same applies in general to parameters of functions and methods.
+
+- The type of a method is the type of a function with the receiver as first argument.
+    However, a function declared this way is not a method.
+
+
+### Types
+#  A type determines the set of values and operations specific to values of that type.
+
+    Type    =   TypeName    | TypeLit   | "(" Type ")".
+    TypeName    =   identifier  | QualifiedIdent.
+    TypeLit =   ArrayType   | StructType    | PointerType   | FunctionType | InterfaceType
+                    | SliceType | MapType | ChannelType.
+
+- unnamed types are specified using a type literal, which composes a new type from existing types.
+- The method set of corresponding pointer type * T is the set of all methods declared with receiver * T or T
+
+
+- A boolean type represents the set of Boolean truth values denoted by the predeclared constants true and false.
+    The predeclared boolean type if bool.
+- The predeclared numeric types are:
+    uint8,uint16,uint32, uint64
+    int8,int16,int32,int64
+    float32, float64
+    complex64,complex128
+    byte    // alias for uint8
+    rune   // alias for Uint32
+
+    uint either 32 or 64 bits
+    int     same size as uint
+    uintptr an unsigned integer large enough to store the uninterpreted bits of a pointer value
+
+- To avoid portablility issues all numeric type are distinct except byte and rune.Conversions are required.
+
+- A string type represents the set of string value. A string value is a sequence of bytes. Strings are immutable.
+  built-in function len can get the length of a string. The length is a compile-time constant if the string is a constant.
+  It is illegal to take the address of such an element; if s[i] is the i'th byte of a string ,&s[i] is invalid.
+
+- An array is a numbered sequence of elements of a single type.
+
+    ArrayType   = "[ ArrayLength ]" ElementType
+    ArrayLength =   Expression
+    ElementType =   Type.
+- The length is part of the array's type.it must evaluate to a non-negative constant representable by a value of type int.
+  built-in function(len) can be used to get length of array.
+
+- Array may be composed to form multidimensional types.
+
+- The value of an uninitialized slice is nil
+
+    SliceType   =   "[" "]" ElementType.
+
+- The lenght of a slice may change. A slice, once initialized, is always associated with an underlying array that
+    holds its elements.
+
+- A new, initalized slice value for a given element type T is made using the built-in funcitoin make.A slice created with make
+    always allocates a new,hidden array to which the returned slice value refers.
+
+- like arrays, slices are always one-dimensional but may be composed to construct higher-dimentsional objects.with slices of slices
+  the inner lengths may vary dynamically.Moreover,the inner slices must be initialized individually.
+
+- A struct 
+
+    StructType      =       "struct" "{" { FieldDecl ";" }"}".
+    FieldDecl       =   ( IdentifierList Type | AnonymousField) [ Tag ].
+    AnonymousField  =   [ "*" ] TypeName.
+    Tag     =   string_lit.
+
+- A embedded type must be specified as a type name T or as a pointer to a non-interface type name * T. and T itself may not be a pointer type.
+
+- The unqualified type name acts as the filed name.
+
+    * T2 //field name T2
+    P.T3 //field name T3
+    * P.T4 //field name T4
+
+- Prometed fields act like ordinary fields of a struct.
+
+- Given a struct type S and a type named T, promoted methods are include in the method set of the struct as follows:
+    If S contains an anonymous field T, the method sets of S and * S both include promoted methods with receiver T.
+    The method set of *S also includes promoted methods with receiver *T
+
+    If S contains an anonymous field *T, the method sets of S and *S both include promoted methods with receiver T or *T.
+
+- A pointer type denotes the set of all pointers to variables of a givern type, called the base type of the pointer.The value
+  of an uninitialized pointer is nil
+
+  PointerType   =   " * "  BaseType
+  BaseType  =   Type.
+
+- A function type denotes the set of all functions with the same parameter and result types.
+
+    FunctionType    =   "func"  Signature.
+    Signature   =   Parameters [ Result ]
+    Result  =   Parameters | Type .
+    Parameters  =   "( [ ParameterList [ "," ] ])".
+    ParameterList   =   ParameterDecl   { "," ParameterDecl }
+    ParameterDecl   =   [ IdentifierList ] [ "..."] Type.
+
+- An interface type specifies a method set called its interface.
+    InterfaceType   =   "interface" "{ { MethodSpec ";" }}"
+    MethodSpec  =   MethodName  Signature | InterfaceTypeName.
+    MethodName  =   identifier.
+    InterfaceTypeName       =   TypeName.
+
+- An interface type T may not embed itself or any interface type that embeds T, recursively.
+
+- A map is an unordered group of elements of on type, called the element type,indexed by a set of unique keys of another type,called the key type.
+
+    MapType =   "map" "[ KeyType ]" ElementType.
+    KeyMap  =   Type
+
+- The comparison operators == and != must be fully defined for operands of the key type.thus the key type must not be a function,map, or slice.if the key 
+    type is the interface type,these comparison operators must be defined for the dynamic key values.failure will cause a run-time panic.
+
+- map ( delete built-in function can remove element)
+
+- a new empty value is made using the built-in function make.
+
+- a nil map is equivalent to an empty map except that no emements may be added.
+
+-  a channel provides a mechanism for concurrently executing functions to communicate by sending and receiving values of specified element type.
+
+    ChannelType =   ( "chan" | "chan" "<-"| "<-" "chan") ElementType
+
+- The optional <- operator specifies the cahnnel direction.a channel may be constrained only to send or only to receive by conversion or assignment.
+
+- a new initialized channel value can be made using the built-in function make.
+- if the capacity is zeor or absent, the channel is unbuffered and communication succeeds only when both a sender and receiver are ready. a nil channel is never
+    ready for communication.
+
+- a channel may be closed with close.
+- the multi-valued assignment form of the receiver operator reports wheter a received value was send before the channel was closed.
+
+- A single channel may be used in send statements,receive operations, and calls to the built-in functions cap and len by any number of goroutines without further synchronization.
+- channels acs as first-in-first-out queues.
 # unsafe
 -  The built-in package unsafe,known to the compiler,provides facilities for low-level programming
 	including operations that violate the type system. A pacakge using unsafe must be vetted 
