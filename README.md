@@ -160,4 +160,5 @@
 -  for a channel c, the built-in function close(c) records that no more values will be sent on the
 	channel.Tt is an error if c is a receive-only channel.Sending to or closing a closed channel	
 
--  
+###note
+- golang function does not support function reload(函数重载)
