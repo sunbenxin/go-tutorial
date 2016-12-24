@@ -327,3 +327,8 @@
 
 ###note
 - golang function does not support function reload(函数重载)
+- string  literal represents a string constant obtained fro concatenating a sequence of characters.There are two forms:
+	raw string literals and interpreted string literals.
+
+- Raw literals are quoted by back quotes. Raw literals may contains newline.Carriage return character("\r") inside raw literals are discarded from then raw string value.
+- Interpreted string are quoted by double quotes. newline can't inside interpreted strings.
