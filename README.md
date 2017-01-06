@@ -339,4 +339,62 @@
 
 ### godoc
 
-- 
+### statement
+## swithch statement
+- "Switch" statement provices multi-way execution. An expression or type specifier is compared to "cases" inside the switch to determine which branch to execute.
+
+    SwitchStmt = ExprSwitchStmt | TypeSwitchStmt
+
+- In an expression switch, the cases contain expressions  that are compared  against the value of the swithc expression. in a type switch,the cases contain types are
+    compared against the type of a specially annotated switch expressioin. The switch expression is evaluated exactly once in a switch statement.
+
+- In an expression switch,the switch expression are evaluated and the case expression, which need not be constant,are evaluated left-to-right and top-to-bottom; the first
+  one that equals the switch expression triggers executioin of the statements of the associated case; the other cases are skipped.If no case matches and there is a "default" case
+  its statement are executed.That can be at most one default case and it may appear anywhere in the "switch" statement.A missing switch expression is equivalent to the boolean value true;
+
+    ExprSwitchStmt  = "switch" [ SimpleStmt ";" ] [ Expression ] "{" { ExprCaseClause }"}".
+    ExprCaseClause =    ExprSwitchCase ":" StatementList
+    ExprSwitchCase  =   "case" ExpressionList | "default"
+
+- If the switch expression evaluated to an untyped constant, it is first converted to its default type; if it's an untyped boolean value, it is first converted to type bool.
+  The predeclared untyped value nil cannot be used as a switch expression.
+
+- If the case expressioin is untyped, it is first converted to the type of the switch expression.For each case expressioin x and the value t of the switch expression, x==t must be
+  a valid comparison.
+
+- A "fallthrough" statement may appear as the last statement of all but the last clause of an expression switch.
+
+- The switch expression may be preceded by a simple statement,which executes before the expression is evaluated.
+
+- A compiler may not allowed multiple case expressions evaluating to the same constant.
+
+- A type switch is marked by a special  switch expression that has the form of a type assertion using the reserved word type rather than an actual type.
+    eg: switch x.(type){
+        //case
+        }
+
+- As with type assertion,  x must be of interface type,and each non-interface type T listed in a case must implement the type of x.The types listed in the cases of a type
+  switch must all be different.
+
+    TypeSwitchStmt      =   "switch" [ SimpleStmt ";" ] TypeSwitchGuard "{" { TypeCaseClause }"}".
+    TypeSwitchGuard     =   [ identifier ":=" ] PrimaryExpr "." "(" "tyep" ")"
+    TypeCaseClause      =  TypeSwitchCase ":" StatementList
+    TypeSwitchCase      =   "case" TypeList | "default".
+    TypeList            =   Type { "," Type }.
+
+- The type TypeSwitchGuard may include a short variable declaration. When that form is used, the variable is declared at the beginning of the implicit block in each clause.
+  In clauses with a case listing exactly one type, the variable has that type; otherwise the variablel has the type of the expression in the TypeSwitchGuard.
+
+- The type in a case may be nil; that case is used when the expression in the TypeSwitchGuard is a nil interface value. There may be at most one nil case.
+
+- The fallthrough is not permitted in a type switch.
+
+###note
+- golang function does not support function reload(函数重载)
+- string  literal represents a string constant obtained fro concatenating a sequence of characters.There are two forms:
+	raw string literals and interpreted string literals.
+
+- Raw literals are quoted by back quotes. Raw literals may contains newline.Carriage return character("\r") inside raw literals are discarded from then raw string value.
+- Interpreted string are quoted by double quotes. newline can't inside interpreted strings.
+
+>>>>>>> bc2295b8f19a339705ad141dd77dd4c63faaa61f
