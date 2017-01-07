@@ -325,6 +325,20 @@
 -  for a channel c, the built-in function close(c) records that no more values will be sent on the
 	channel.Tt is an error if c is a receive-only channel.Sending to or closing a closed channel	
 
+### Handling panics
+- Execution errors trigger a run-time panic equivalent to a call  of the built-in function panic.
+- Two built-in functions panic and recover assist in reporting and handling run-time panics and program-defined error conditions.
+
+- While executing  a function F, an explicit call to panic or a run-time panic terminates the execution of F. Any function deffered by F
+    are then executed as usual. Next, any deffered functions run by F's caller are run, and so on to any deffered by the top-level function
+    in the executing goroutine. At that point,the program is terminated and error condition is reported,including the value of the argument to panic.
+
+### package
+#net/http
+
+
+### godoc
+
 ### statement
 ## swithch statement
 - "Switch" statement provices multi-way execution. An expression or type specifier is compared to "cases" inside the switch to determine which branch to execute.
