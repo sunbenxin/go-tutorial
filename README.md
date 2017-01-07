@@ -336,6 +336,18 @@
 ### package
 #net/http
 
+- The client must close response body when finished with it.
+- For control HTTP client headers, redirect policy,and other settings,create a Client.
+
+- For control over proxies,TLS configuration,keep-alives,compression,and other settings, create a Transport.
+- Clients and Trasports are safe for concurrent use by multiple goroutines and for efficiency should only be created once and re-used.
+- ListenAndServe starts an HTTP server with a given address and handler. The handler is usually nil, which means to use DefaultServeMux. Handle and HandleFunc add handlers to DefaultServeMux
+
+- More cotrol over the server's behavior is available by creating a custom  Server.
+- The http package has transparent support for the HTTP/2 protocol when using HTTPS.Programs that must disable HTTP/2 can do so by setting Transport.TLSNextProto (for clients) or Server.TLSNextProto (for servers) to a non-nil, empty map. Alternatively, the following GODEBUG environment variables are currently supported:
+
+
+
 
 ### godoc
 
