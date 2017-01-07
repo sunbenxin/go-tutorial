@@ -383,3 +383,5 @@
 - Raw literals are quoted by back quotes. Raw literals may contains newline.Carriage return character("\r") inside raw literals are discarded from then raw string value.
 - Interpreted string are quoted by double quotes. newline can't inside interpreted strings.
 
+- clear commit message
+
