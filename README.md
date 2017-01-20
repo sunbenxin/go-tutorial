@@ -346,7 +346,32 @@
 - More cotrol over the server's behavior is available by creating a custom  Server.
 - The http package has transparent support for the HTTP/2 protocol when using HTTPS.Programs that must disable HTTP/2 can do so by setting Transport.TLSNextProto (for clients) or Server.TLSNextProto (for servers) to a non-nil, empty map. Alternatively, the following GODEBUG environment variables are currently supported:
 
+# client
+## time set
+## proxy
+## safe for concurrent use by multiple goroutines
+## cookies
+## redirects
 
+# roundtripper
+- an interface representing the ability to execute a single HTTP transaction, obtaining the Response for a given Request.
+- must be safe for concurrent use by multiple goroutines.
+- RoundTripper should not attempt to interpret the response.
+- In particular, RountTripper must return err== nil if it obtained a repsonse, regardless of the repsonse's HTTP status code.
+ A non-nil err should be reserved for failure to obtain a response. Similarly, RoundTrip should not attempt to handle higher-level protocol details such as redirects, authentication, or cookies.
+
+- should not modify the request, except for consuming and closing the Request's Body.
+- must always close the body, including on errors,but depending on the implementation may do so in a separate goroutine even after roundTrip returns.This means that callers wanting to
+reuse the body by subsequent requests must arrange to wait for the close call before doing so.
+- The request' url and header fields must be initialized.
+
+# Transport is an implementaton of RoundTripper that supports HTTP. HTTPS, and HTTP proxies.
+- by default, Transport caches connections for future re-use.This may leave many open connections when accessing many hosts.
+This behavior can be managed using Transport's CloseIdleConnections method and the MaxIdleConnsPerHost and DisableKeepAlives fields.
+
+- 
+
+# time
 
 
 ### godoc
