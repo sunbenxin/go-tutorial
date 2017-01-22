@@ -345,6 +345,7 @@
 
 - More cotrol over the server's behavior is available by creating a custom  Server.
 - The http package has transparent support for the HTTP/2 protocol when using HTTPS.Programs that must disable HTTP/2 can do so by setting Transport.TLSNextProto (for clients) or Server.TLSNextProto (for servers) to a non-nil, empty map. Alternatively, the following GODEBUG environment variables are currently supported:
+- if client.do return err == nil, need close resp.body self whatever read it or not.
 
 # client
 ## time set
