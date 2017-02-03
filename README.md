@@ -437,3 +437,42 @@ This behavior can be managed using Transport's CloseIdleConnections method and t
 
 - clear commit message
 
+- struct init // type1(type2)
+
+# go in practice
+
+## IDE
+### bash
+### vim
+
+## fundamentals
+### command-line
+
+### handle configuration
+
+### web server
+
+### cache(redis,mongodb,memcache ...)
+
+### database(postgres,mysql)
+### go concurrency
+
+
+## mechanics of managing a Go application
+### handling errors and panics
+### debugging and testing(performance test)
+- An error indicates that a particular task couldn’t be completed successfully
+- A panic indicates that a severe event occurred, probably as a result of a programmer error
+
+## user interfaces for you application
+### html and email template patterns
+### serving and receiving assests and forms
+
+### REST APIs
+### passing and handling errors over http
+### passing and mapping JSON
+### Versioning REST APIs
+
+## talking your application to the cloud
+
+###
