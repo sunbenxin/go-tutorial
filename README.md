@@ -439,6 +439,8 @@ This behavior can be managed using Transport's CloseIdleConnections method and t
 
 - struct init // type1(type2)
 
+- short variable declaration need has new variable on the left side.
+
 # go in practice
 
 ## IDE
@@ -455,10 +457,30 @@ This behavior can be managed using Transport's CloseIdleConnections method and t
 ### cache(redis,mongodb,memcache ...)
 
 ### database(postgres,mysql)
+- pg client(gopkg.in/pg)
+    - go-pg recognizes placeholders(`?`) in queries and replaces them with parameters when queries are executed.Parameters are escaped before replacing according to PostgreSQL rules.
+        - all parameters are properly quoted against SQL injections
+        - null byte is removed;
+        - JSON/JSONB gets `\u0000` escaped as `\\u0000`.
+    - support indexed parameters, named parameters,global params
+
 ### go concurrency
 
 
 ## mechanics of managing a Go application
+### Go package management
+- verdoring way
+    - Go1.6 includes support for using local copies of external dependencies to satisfy imports of those dependencie, oftern referred to as vendoring.
+    - Code below a directory named "vendor" is importable only by code in the directory tree rooted at the parent of "vendor",and only using an import path
+    that omits the prefix up to and including the vendor element.
+    - Code in vendor directories is not subject to import path checking.
+    - When 'go get' checks out or updates a git repository, it now also updates submodules.
+
+- version way by git repo
+    - by directory (floder v1, v2...)
+
+- gopkg.in supoort url redirect from a versioned url to code repo
+
 ### handling errors and panics
 ### debugging and testing(performance test)
 - An error indicates that a particular task couldn’t be completed successfully
