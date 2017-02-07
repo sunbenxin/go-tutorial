@@ -465,8 +465,48 @@ This behavior can be managed using Transport's CloseIdleConnections method and t
     - support indexed parameters, named parameters,global params
 
 ### go concurrency
+- two way: csp , shared variables
 
+- Each concurrently executing activity is called goroutine.
+- When a program starts,its only goroutine is the one that calls the main function,the main goroutine.
+- There are no ways to communicate with a goroutine to request that it stop itself. And one goroutine to stop another.
+- As with maps, a channel is a reference to the data structure created by make.When we copy a channel or pass one as an argument to a function,we are copying a reference.The zero value of a channel is nil.
 
+- Two channels of the same type may be compared using ==.The comparision is true if both are references to the same channel data structure. A channel may also be compared to nil.
+- A channel has two principal operations, send and receive. A receive expression whose result is not used is valid statement:
+
+    ch <- x // a send statement
+    x = <- ch // a receive expression in an assignment statement
+    <-ch    // a receive statement ; result is discarded
+
+- Channels support close operation.which sets a flag indicating that no more values will ever be sent on this channel,subsequent attempts to send will panic.
+    Receive operations on a closed channel yield the values that have been sent until no more values are left; any receive operatons thereafter complete immediately and yield the zero value of the channel's element type.
+
+- channel can be unbuffered channel and buffered channel.
+
+    ch = make(chan int)         // unbuffered channel
+    ch = make(chan int, 0)          // unbuffered channel
+    ch = make(chan int, 3)          // buffered channel with capacity 3
+
+- A send operation on an unbuffered channel blocks the sending goroutine until another goroutine executes a corresponding receive on the same channel, at which point the value is transmitted and both goroutines may continue.also the receive operation.
+
+- Communication over an unbuffered channel causes the sending and receiving goroutines to synchronize.So unbuffered channels are sometimes called synchronous channels.
+
+- There is no way to test directly whether a channel has been closed.but thereis a variant of the receive operation that produces two results: the received channel element, plus a bollean value.conventionally called ok.which is true for a successful receive and false for a receive on
+    a closed and trained channel.conventionally called ok.which is true for a successful receive and false for a receive on
+        a closed and drained channel.
+- Need not to close channel, the garbage collector will do whether or not it is closed.
+- Attempting to clos an already-closed channel causes a panic.as does close a nil channel. Close channels has another use as a broadcast mechanism.
+
+- directional channel can limint its intent and prevent misuse.
+
+- It is a mistake to use buffered channels within a single goroutine as a queue.Channels are deeply connected to goroutine scheduling,and without another goroutine receiving from the channel,a sender- and perhaps the whole program -risks becoming blocked forever.
+- leak goroutines are not automatically collected.so it is important to make sure that goroutines terminate theselves when no longer needed.
+- failure to allocate sufficient buffer capacity would cause the program to deadlock.
+
+- When we konw an uppr bound on the number of values that will be sent on a channel,it is not unusual to create a buffered channel of that size and perform all the sends before the first value is received.
+
+- Channel buffering may also affect program performance.
 ## mechanics of managing a Go application
 ### Go package management
 - verdoring way
@@ -493,6 +533,7 @@ This behavior can be managed using Transport's CloseIdleConnections method and t
 ### REST APIs
 ### passing and handling errors over http
 ### passing and mapping JSON
+
 ### Versioning REST APIs
 
 ## talking your application to the cloud
