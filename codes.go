@@ -133,3 +133,13 @@ func download(location string, file *os.File, retries int64) error {
 
 	return nil
 }
+
+// float precision set
+// truncate float64 into specified precision
+func SetFloatPrecision(num float64, precision int) float64 {
+	fmts := fmt.Sprintf("%%.%vf", precision)
+	sn := fmt.Sprintf(fmts, num)
+	n, _ := strconv.ParseFloat(sn, 64)
+
+	return n
+}
