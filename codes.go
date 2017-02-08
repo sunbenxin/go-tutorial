@@ -143,3 +143,17 @@ func SetFloatPrecision(num float64, precision int) float64 {
 
 	return n
 }
+
+//struct field init with func expression ?
+type test struct {
+	x string
+}
+
+func tests(a string) string {
+	return "def"
+}
+
+func tmain() {
+	a := test{x: tests("abc")}
+	fmt.Println(a)
+}
