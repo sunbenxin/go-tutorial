@@ -2,6 +2,7 @@
 
 ## words to remember
  - qualified omitted explicit brace bracket encompasses extent
+ - flirting culture co-founder
 
 ## go sytanx
 
