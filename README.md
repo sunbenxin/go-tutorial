@@ -2,7 +2,7 @@
 
 ## words to remember
  - qualified omitted explicit brace bracket encompasses extent
- - flirting culture co-founder
+ - flirting culture co-founder Valentine
 
 ## go sytanx
 
@@ -539,4 +539,8 @@ This behavior can be managed using Transport's CloseIdleConnections method and t
 
 ## talking your application to the cloud
 
-###
+### rpc
+
+
+### redis
+- concurrent i/o

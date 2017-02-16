@@ -7,6 +7,7 @@ import (
 	"net"
 	"os"
 	"sync"
+	"time"
 )
 
 //synchronize
@@ -112,4 +113,21 @@ func makeThumbnails6(filenames <-chan string) int64 {
 		total += size
 	}
 	return total
+}
+
+// time tick
+func timeTicker() {
+	tick := time.Tick(5 * time.Second)
+	idx := 0
+	for {
+		select {
+		case <-tick:
+			idx = 0
+		default:
+			if idx < 100000 {
+				fmt.Println(idx)
+				idx++
+			}
+		}
+	}
 }
