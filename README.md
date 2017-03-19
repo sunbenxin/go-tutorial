@@ -19,6 +19,7 @@
 
 ## words to remember
  - qualified omitted explicit brace bracket encompasses extent
+ - flirting culture co-founder Valentine
 
 ## go sytanx
 
@@ -355,6 +356,44 @@
 #json
 - json marshal must be export field can be encode
 
+- The client must close response body when finished with it.
+- For control HTTP client headers, redirect policy,and other settings,create a Client.
+
+- For control over proxies,TLS configuration,keep-alives,compression,and other settings, create a Transport.
+- Clients and Trasports are safe for concurrent use by multiple goroutines and for efficiency should only be created once and re-used.
+- ListenAndServe starts an HTTP server with a given address and handler. The handler is usually nil, which means to use DefaultServeMux. Handle and HandleFunc add handlers to DefaultServeMux
+
+- More cotrol over the server's behavior is available by creating a custom  Server.
+- The http package has transparent support for the HTTP/2 protocol when using HTTPS.Programs that must disable HTTP/2 can do so by setting Transport.TLSNextProto (for clients) or Server.TLSNextProto (for servers) to a non-nil, empty map. Alternatively, the following GODEBUG environment variables are currently supported:
+- if client.do return err == nil, need close resp.body self whatever read it or not.
+
+# client
+## time set
+## proxy
+## safe for concurrent use by multiple goroutines
+## cookies
+## redirects
+
+# roundtripper
+- an interface representing the ability to execute a single HTTP transaction, obtaining the Response for a given Request.
+- must be safe for concurrent use by multiple goroutines.
+- RoundTripper should not attempt to interpret the response.
+- In particular, RountTripper must return err== nil if it obtained a repsonse, regardless of the repsonse's HTTP status code.
+ A non-nil err should be reserved for failure to obtain a response. Similarly, RoundTrip should not attempt to handle higher-level protocol details such as redirects, authentication, or cookies.
+
+- should not modify the request, except for consuming and closing the Request's Body.
+- must always close the body, including on errors,but depending on the implementation may do so in a separate goroutine even after roundTrip returns.This means that callers wanting to
+reuse the body by subsequent requests must arrange to wait for the close call before doing so.
+- The request' url and header fields must be initialized.
+
+# Transport is an implementaton of RoundTripper that supports HTTP. HTTPS, and HTTP proxies.
+- by default, Transport caches connections for future re-use.This may leave many open connections when accessing many hosts.
+This behavior can be managed using Transport's CloseIdleConnections method and the MaxIdleConnsPerHost and DisableKeepAlives fields.
+
+- 
+
+# time
+
 
 ### godoc
 
@@ -409,6 +448,7 @@
 - The fallthrough is not permitted in a type switch.
 
 ### note
+=======
 - golang function does not support function reload(函数重载)
 - string  literal represents a string constant obtained fro concatenating a sequence of characters.There are two forms:
 	raw string literals and interpreted string literals.
@@ -426,3 +466,111 @@
 
 
 
+- clear commit message
+
+- struct init // type1(type2)
+
+- short variable declaration need has new variable on the left side.
+
+# go in practice
+
+## IDE
+### bash
+### vim
+
+## fundamentals
+### command-line
+
+### handle configuration
+
+### web server
+
+### cache(redis,mongodb,memcache ...)
+
+### database(postgres,mysql)
+- pg client(gopkg.in/pg)
+    - go-pg recognizes placeholders(`?`) in queries and replaces them with parameters when queries are executed.Parameters are escaped before replacing according to PostgreSQL rules.
+        - all parameters are properly quoted against SQL injections
+        - null byte is removed;
+        - JSON/JSONB gets `\u0000` escaped as `\\u0000`.
+    - support indexed parameters, named parameters,global params
+
+### go concurrency
+- two way: csp , shared variables
+
+- Each concurrently executing activity is called goroutine.
+- When a program starts,its only goroutine is the one that calls the main function,the main goroutine.
+- There are no ways to communicate with a goroutine to request that it stop itself. And one goroutine to stop another.
+- As with maps, a channel is a reference to the data structure created by make.When we copy a channel or pass one as an argument to a function,we are copying a reference.The zero value of a channel is nil.
+
+- Two channels of the same type may be compared using ==.The comparision is true if both are references to the same channel data structure. A channel may also be compared to nil.
+- A channel has two principal operations, send and receive. A receive expression whose result is not used is valid statement:
+
+    ch <- x // a send statement
+    x = <- ch // a receive expression in an assignment statement
+    <-ch    // a receive statement ; result is discarded
+
+- Channels support close operation.which sets a flag indicating that no more values will ever be sent on this channel,subsequent attempts to send will panic.
+    Receive operations on a closed channel yield the values that have been sent until no more values are left; any receive operatons thereafter complete immediately and yield the zero value of the channel's element type.
+
+- channel can be unbuffered channel and buffered channel.
+
+    ch = make(chan int)         // unbuffered channel
+    ch = make(chan int, 0)          // unbuffered channel
+    ch = make(chan int, 3)          // buffered channel with capacity 3
+
+- A send operation on an unbuffered channel blocks the sending goroutine until another goroutine executes a corresponding receive on the same channel, at which point the value is transmitted and both goroutines may continue.also the receive operation.
+
+- Communication over an unbuffered channel causes the sending and receiving goroutines to synchronize.So unbuffered channels are sometimes called synchronous channels.
+
+- There is no way to test directly whether a channel has been closed.but thereis a variant of the receive operation that produces two results: the received channel element, plus a bollean value.conventionally called ok.which is true for a successful receive and false for a receive on
+    a closed and trained channel.conventionally called ok.which is true for a successful receive and false for a receive on
+        a closed and drained channel.
+- Need not to close channel, the garbage collector will do whether or not it is closed.
+- Attempting to clos an already-closed channel causes a panic.as does close a nil channel. Close channels has another use as a broadcast mechanism.
+
+- directional channel can limint its intent and prevent misuse.
+
+- It is a mistake to use buffered channels within a single goroutine as a queue.Channels are deeply connected to goroutine scheduling,and without another goroutine receiving from the channel,a sender- and perhaps the whole program -risks becoming blocked forever.
+- leak goroutines are not automatically collected.so it is important to make sure that goroutines terminate theselves when no longer needed.
+- failure to allocate sufficient buffer capacity would cause the program to deadlock.
+
+- When we konw an uppr bound on the number of values that will be sent on a channel,it is not unusual to create a buffered channel of that size and perform all the sends before the first value is received.
+
+- Channel buffering may also affect program performance.
+## mechanics of managing a Go application
+### Go package management
+- verdoring way
+    - Go1.6 includes support for using local copies of external dependencies to satisfy imports of those dependencie, oftern referred to as vendoring.
+    - Code below a directory named "vendor" is importable only by code in the directory tree rooted at the parent of "vendor",and only using an import path
+    that omits the prefix up to and including the vendor element.
+    - Code in vendor directories is not subject to import path checking.
+    - When 'go get' checks out or updates a git repository, it now also updates submodules.
+
+- version way by git repo
+    - by directory (floder v1, v2...)
+
+- gopkg.in supoort url redirect from a versioned url to code repo
+
+### handling errors and panics
+### debugging and testing(performance test)
+- An error indicates that a particular task couldn’t be completed successfully
+- A panic indicates that a severe event occurred, probably as a result of a programmer error
+
+## user interfaces for you application
+### html and email template patterns
+### serving and receiving assests and forms
+
+### REST APIs
+### passing and handling errors over http
+### passing and mapping JSON
+
+### Versioning REST APIs
+
+## talking your application to the cloud
+
+### rpc
+
+
+### redis
+- concurrent i/o
