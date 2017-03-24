@@ -73,7 +73,7 @@
 -  labels are declared  by labeled statements and are used in the "break" , "continue" and "goto" statements. It is  illegal to define a label that is never used.
        in contrast to other identifiers, labels are not block scoped  and do not conflict with identifiers that are not labels. The scope of a label
        is the function in which it is declared and exclude the body of any nested function.
--  the blank identifier is represented by the underscore character _.
+-  the blank identifier is represented by the underscore character _ .
 
 ### Program initialization and execution
 - Within a package, package-level variables are initialized in declaration order but after any variables they depend on.
@@ -544,3 +544,11 @@ This behavior can be managed using Transport's CloseIdleConnections method and t
 
 ### redis
 - concurrent i/o
+
+### code review comments
+https://github.com/golang/go/wiki/Comments
+
+### code review
+https://github.com/golang/go/wiki/CodeReviewComments
+
+
