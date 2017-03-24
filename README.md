@@ -1,3 +1,20 @@
+# All
+[go-toturial("https://github.com/sunbenxin/go-tutorial")]
+
+[vim-toturial("https://github.com/sunbenxin/vim-tutorial")]
+
+[pg-toturial("https://github.com/sunbenxin/postgres-tutorial")]
+
+[tantan-toturial("https://git.oschina.net/sunbenxin/mytantan")]
+
+[make-toturial("https://github.com/sunbenxin/make-tutorial")]
+
+[bash-toturial("https://github.com/sunbenxin/bash-toturial")]
+
+[dict-toturial("https://github.com/sunbenxin/dict-toturial")]
+
+--------------------------------------------------------------------------------------------
+
 # go-tutorial
 
 ## words to remember
@@ -336,6 +353,8 @@
 
 ### package
 #net/http
+#json
+- json marshal must be export field can be encode
 
 - The client must close response body when finished with it.
 - For control HTTP client headers, redirect policy,and other settings,create a Client.
@@ -428,13 +447,24 @@ This behavior can be managed using Transport's CloseIdleConnections method and t
 
 - The fallthrough is not permitted in a type switch.
 
-###note
+### note
+=======
 - golang function does not support function reload(函数重载)
 - string  literal represents a string constant obtained fro concatenating a sequence of characters.There are two forms:
 	raw string literals and interpreted string literals.
 
 - Raw literals are quoted by back quotes. Raw literals may contains newline.Carriage return character("\r") inside raw literals are discarded from then raw string value.
 - Interpreted string are quoted by double quotes. newline can't inside interpreted strings.
+
+- * string variable need to check if nil before dereference
+
+### Coding style
+- log
+- if control
+
+### Test
+
+
 
 - clear commit message
 
